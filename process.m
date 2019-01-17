@@ -71,13 +71,13 @@ end
 Mon_BM( Mon_BM < 0 ) = NaN;
 
 Mon_A = Mon_A(1:223, :);
-Mon_ME = Mon_SizeAll;
+Mon_ME = Mon_SizeFlt;
 
 Mon_Y = Mon_Yield;
-Mon_ln_ME = log(Mon_SizeAll);
-Mon_ln_A_ME = log(Mon_A ./ Mon_SizeAll);
+Mon_ln_ME = log(Mon_ME);
+Mon_ln_A_ME = log(Mon_A ./ Mon_ME);
 Mon_ln_BE_ME = log(Mon_BM);
-Mon_BE = Mon_BM .* Mon_SizeAll;
+Mon_BE = Mon_BM .* Mon_ME;
 Mon_ln_A_BE = log(Mon_A ./ Mon_BE);
 
 Mon_A_BE = Mon_A ./ Mon_BE;

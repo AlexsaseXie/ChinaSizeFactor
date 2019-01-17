@@ -5,7 +5,7 @@ function [] = main()
 load('new_data.mat','Mon_A','Mon_A_BE','Mon_BE','Mon_EP','Mon_ln_A_BE','Mon_ln_BE_ME','Mon_ln_ME','Mon_ME','Mon_Y');
 
 begin_mon = 5 * 12 + 1;
-end_mon = 18 * 12+ 6;
+end_mon = 18 * 12 + 6;
 
 % test for ptr month
 MON = 6;
@@ -26,27 +26,27 @@ for iter = begin_mon:end_mon
 
     count = 0;
     for id = 1:3631
-        if (isnan(Mon_ln_ME(ptr,id)))
+        if (isnan(Mon_ln_ME(ptr-1,id)))
             continue;
         end
         if (isnan(Mon_Y(ptr,id)))
             continue;
         end
-        if (isnan(Mon_ln_BE_ME(ptr, id)))
+        if (isnan(Mon_ln_BE_ME(ptr-1, id)))
             continue;
         end
-        if (isnan(Mon_ln_A_BE(ptr, id)))
+        if (isnan(Mon_ln_A_BE(ptr-1, id)))
             continue
         end
         count = count + 1;
 
         index_list = [index_list, id];
         y_list = [y_list, Mon_Y(ptr, id)];
-        ln_me_list = [ln_me_list, Mon_ln_ME(ptr, id)];
-        ln_be_me_list = [ln_be_me_list, Mon_ln_BE_ME(ptr, id)];
-        ln_a_be_list = [ln_a_be_list, Mon_ln_A_BE(ptr, id)];
+        ln_me_list = [ln_me_list, Mon_ln_ME(ptr-1, id)];
+        ln_be_me_list = [ln_be_me_list, Mon_ln_BE_ME(ptr-1, id)];
+        ln_a_be_list = [ln_a_be_list, Mon_ln_A_BE(ptr-1, id)];
     end
-
+    
     index_list = index_list';
     y_list = y_list';
     ln_me_list = ln_me_list';
@@ -54,15 +54,13 @@ for iter = begin_mon:end_mon
     ln_a_be_list = ln_a_be_list';
 
     t_2_a = [index_list, y_list, ln_me_list, ln_be_me_list, ln_a_be_list];
-    
     t_2_a = sortrows(t_2_a, 3);
     
     drop = fix(count * 0.3);
-    
-    t_2_a = t_2_a(drop+1 : count, :);
+    t_2_a = t_2_a(drop+1: count, :);
     count = count - drop;
 
-    portfolio_size = fix( count / divide);
+    portfolio_size = floor( count / divide);
 
     sum_y = 0;
     sum_y_on_ME = 0;
@@ -75,8 +73,8 @@ for iter = begin_mon:end_mon
 
     for i = 1:count
         sum_y = sum_y + t_2_a(i, 2);
-        sum_ME = sum_ME + Mon_ME(ptr, t_2_a(i, 1));
-        sum_y_on_ME = sum_y_on_ME + Mon_ME(ptr, t_2_a(i, 1)) * t_2_a(i, 2);
+        sum_ME = sum_ME + Mon_ME(ptr-1, t_2_a(i, 1));
+        sum_y_on_ME = sum_y_on_ME + Mon_ME(ptr-1, t_2_a(i, 1)) * t_2_a(i, 2);
         sum_ln_me = sum_ln_me + t_2_a(i, 3);
         sum_ln_be_me = sum_ln_be_me + t_2_a(i, 4);
         sum_ln_a_be = sum_ln_a_be + t_2_a(i, 5);
@@ -122,5 +120,6 @@ temp_table.Properties.VariableNames{3} = 'ln_ME';
 temp_table.Properties.VariableNames{4} = 'ln_BE_ME';
 temp_table.Properties.VariableNames{5} = 'ln_A_BE';
 
-save("task2/aggregate_result.mat",'temp_table');
+disp(temp_table);
+save('task2/aggregate_result.mat','temp_table');
 end

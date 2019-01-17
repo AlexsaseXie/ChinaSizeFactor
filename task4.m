@@ -24,25 +24,25 @@ for iter = begin_mon:end_mon
 
     count = 0;
     for id = 1:3631
-        if (isnan(Mon_ln_ME(ptr,id)))
+        if (isnan(Mon_ln_ME(ptr - 1,id)))
             continue;
         end
         if (isnan(Mon_Y(ptr,id)))
             continue;
         end
-        if (isnan(Mon_ln_BE_ME(ptr, id)))
+        if (isnan(Mon_ln_BE_ME(ptr - 1, id)))
             continue;
         end
-        if (isnan(Mon_ln_A_BE(ptr, id)))
+        if (isnan(Mon_ln_A_BE(ptr - 1, id)))
             continue
         end
         count = count + 1;
 
         index_list = [index_list, id];
         y_list = [y_list, Mon_Y(ptr, id)];
-        ln_me_list = [ln_me_list, Mon_ln_ME(ptr, id)];
-        ln_be_me_list = [ln_be_me_list, Mon_ln_BE_ME(ptr, id)];
-        ln_a_be_list = [ln_a_be_list, Mon_ln_A_BE(ptr, id)];
+        ln_me_list = [ln_me_list, Mon_ln_ME(ptr - 1, id)];
+        ln_be_me_list = [ln_be_me_list, Mon_ln_BE_ME(ptr - 1, id)];
+        ln_a_be_list = [ln_a_be_list, Mon_ln_A_BE(ptr - 1, id)];
     end
 
     index_list = index_list';
@@ -65,8 +65,8 @@ for iter = begin_mon:end_mon
 
     for i = 51:count - 50
         sum_y = sum_y + t_2_a(i, 2);
-        sum_ME = sum_ME + Mon_ME(ptr, t_2_a(i, 1));
-        sum_y_on_ME = sum_y_on_ME + t_2_a(i, 2) * Mon_ME(ptr, t_2_a(i, 1));
+        sum_ME = sum_ME + Mon_ME(ptr - 1, t_2_a(i, 1));
+        sum_y_on_ME = sum_y_on_ME + t_2_a(i, 2) * Mon_ME(ptr - 1, t_2_a(i, 1));
 
         if mod(i - 50, portfolio_size) == 0
             result = [sum_y/portfolio_size; sum_y_on_ME / sum_ME];
