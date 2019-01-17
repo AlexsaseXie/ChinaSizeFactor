@@ -173,6 +173,9 @@ disp('ew:  max_drawdown:');disp(ew_max_drawdown);disp(' begin:');disp(ew_drawdow
 disp('vw:  max_drawdown:');disp(vw_max_drawdown);disp(' begin:');disp(vw_drawdown_begin); disp(' end:');disp(vw_drawdown_end);
 
 % sharp ratio
+%%ew_mon_rate = ew_mon_rate(60:140);
+%%vw_mon_rate = vw_mon_rate(60:140);
+
 E_ew_rp = mean(ew_mon_rate);
 E_vw_rp = mean(vw_mon_rate);
 sigma_ew_rp = std(ew_mon_rate);
