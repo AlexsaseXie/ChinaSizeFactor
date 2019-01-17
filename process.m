@@ -82,5 +82,5 @@ Mon_ln_A_BE = log(Mon_A ./ Mon_BE);
 
 Mon_A_BE = Mon_A ./ Mon_BE;
 
-save('new_data.mat');
+save('new_data.mat','Mon_BM','Mon_A','Mon_A_BE','Mon_BE','Mon_EP','Mon_ln_A_BE','Mon_ln_BE_ME','Mon_ln_ME','Mon_ME','Mon_Y','Mon_Yield','Mon_Yield_1','Mon_TurnOver');
 end

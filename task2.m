@@ -107,7 +107,7 @@ for iter = begin_mon:end_mon
     if MON == 0
         MON = 12;
     end
-    save("task2/"+num2str(2000 + fix((ptr - 1) / 12))+"_"+num2str(MON)+".mat",'temp_table','count','t_2_a');
+    save(['task2/',char(num2str(2000 + fix((ptr - 1) / 12))),'_',char(num2str(MON)),'.mat'],'temp_table','count','t_2_a');
     %save("task2/"+num2str(2000+iter)+"_"+num2str(MON)+".mat",'temp_table','count','t_2_a');
 end
 

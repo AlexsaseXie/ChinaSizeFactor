@@ -137,7 +137,7 @@ for iter = begin_mon:end_mon
     vw_temp_table.Properties.VariableNames{3} = 'BM_Group_3';
     vw_temp_table.Properties.VariableNames{4} = 'BM_Group_4';
     vw_temp_table.Properties.VariableNames{5} = 'BM_Group_5';
-    save("task6/"+num2str(2000 + fix((ptr - 1) / 12))+"_"+num2str(MON)+".mat",'vw_temp_table','temp_table');
+    save(['task6/',char(num2str(2000 + fix((ptr - 1) / 12))),'_',char(num2str(MON)),'.mat'],'vw_temp_table','temp_table');
 end
 
 % max drawdown
@@ -176,15 +176,38 @@ disp('vw:  max_drawdown:');disp(vw_max_drawdown);disp(' begin:');disp(vw_drawdow
 %%ew_mon_rate = ew_mon_rate(60:140);
 %%vw_mon_rate = vw_mon_rate(60:140);
 
-E_ew_rp = mean(ew_mon_rate);
-E_vw_rp = mean(vw_mon_rate);
-sigma_ew_rp = std(ew_mon_rate);
-sigma_vw_rp = std(vw_mon_rate);
-rf = 0.001856; % 2005.01
+ew_annual_rate = [];
+vw_annual_rate = [];
+ptr = begin_mon + 12;
+while ptr <= end_mon
+    index = ptr - begin_mon + 1;
+    temp_rate = ( ew_result(index) - ew_result(index - 12) ) / ew_result(index - 12);
+    ew_annual_rate = [ew_annual_rate, temp_rate];
+    temp_rate = ( vw_result(index) - vw_result(index - 12) ) / vw_result(index - 12);
+    vw_annual_rate = [vw_annual_rate, temp_rate];
+    ptr = ptr + 12;
+end
+
+% E_ew_rp = mean(ew_mon_rate);
+% E_vw_rp = mean(vw_mon_rate);
+% sigma_ew_rp = std(ew_mon_rate);
+% sigma_vw_rp = std(vw_mon_rate);
+% rf = 0.001856; % 2005.01
+% 
+% ew_sharp_ratio = (E_ew_rp-rf) / sigma_ew_rp;
+% vw_sharp_ratio = (E_vw_rp-rf) / sigma_vw_rp;
+
+E_ew_rp = mean(ew_annual_rate);
+E_vw_rp = mean(vw_annual_rate);
+sigma_ew_rp = std(ew_annual_rate);
+sigma_vw_rp = std(vw_annual_rate);
+rf = 0.001856 * 12; % 2005.01
 
 ew_sharp_ratio = (E_ew_rp-rf) / sigma_ew_rp;
 vw_sharp_ratio = (E_vw_rp-rf) / sigma_vw_rp;
 
+disp('EW annual return:'); disp(E_ew_rp);
+disp('VW annual return:'); disp(E_vw_rp);
 disp('EW sharp ratio:');disp(ew_sharp_ratio);
 disp('VW sharp ratio:');disp(vw_sharp_ratio);
 

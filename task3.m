@@ -10,6 +10,7 @@ end_mon = 18 * 12 + 6;
 % test for ptr month
 divide = 5;
 
+aggregate_panel = zeros(begin_mon - end_mon + 1,divide + 1,divide + 1);
 aggregate_results = zeros(divide, divide);
 mkdir('task3');
 
@@ -100,15 +101,37 @@ for iter = begin_mon:end_mon
     temp_table.Properties.VariableNames{4} = 'BM_Group_4';
     temp_table.Properties.VariableNames{5} = 'BM_Group_5';
     
+    %
+    branch_diff = branch_results(1,:) - branch_results(5, :);
+    branch_results = [branch_results; branch_diff];
+    branch_avg = mean(branch_results, 2);
+    branch_results = [branch_results, branch_avg];
+    aggregate_panel(ptr - begin_mon + 1, :, :) = branch_results;
     
     MON = mod(ptr, 12);
     if MON == 0
         MON = 12;
     end
-    save("task3/"+num2str(2000 + fix((ptr - 1) / 12))+"_"+num2str(MON)+".mat",'temp_table','count','t_2_a','branch_size','portfolio_size');
+    save(['task3/',char(num2str(2000 + fix((ptr - 1) / 12))),'_',char(num2str(MON)),'.mat'],'temp_table','count','t_2_a','branch_size','portfolio_size');
 end
 
 aggregate_results = aggregate_results / (end_mon - begin_mon + 1);
+
+diff = aggregate_results(1,:) - aggregate_results(5, :);
+aggregate_results = [aggregate_results; diff];
+
+avg = mean(aggregate_results, 2);
+aggregate_results = [aggregate_results, avg];
+
+p_panel = zeros(divide + 1, divide + 1);
+t_panel = zeros(divide + 1, divide + 1);
+for i = 1:divide + 1
+    for j = 1:divide + 1
+        [h, p, ci] = ttest(aggregate_panel(:,i,j));
+        p_panel(i, j) = p;
+        t_panel(i, j) = mean(aggregate_panel(:,i,j)) * sqrt(size(aggregate_panel(:,i,j), 1)) / std(aggregate_panel(:,i,j));
+    end
+end
 
 temp_table = array2table(aggregate_results);
 temp_table.Properties.VariableNames{1} = 'BM_Group_1';
@@ -116,7 +139,8 @@ temp_table.Properties.VariableNames{2} = 'BM_Group_2';
 temp_table.Properties.VariableNames{3} = 'BM_Group_3';
 temp_table.Properties.VariableNames{4} = 'BM_Group_4';
 temp_table.Properties.VariableNames{5} = 'BM_Group_5';
+temp_table.Properties.VariableNames{6} = 'BM_Avg';
 
 disp(temp_table);
-save('task3/aggregate_result.mat','temp_table');
+save('task3/aggregate_result.mat','temp_table','p_panel','t_panel');
 end

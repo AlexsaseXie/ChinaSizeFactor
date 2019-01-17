@@ -95,15 +95,29 @@ for ptr = 1: divide
     y = aggregate_results(ptr * 2 - 1, :)' - Rf(1:end_mon-begin_mon + 1, 2);
     tb = table(y, Three_Factor(1:end_mon-begin_mon + 1,2), Three_Factor(1:end_mon-begin_mon + 1, 3), Three_Factor(1:end_mon-begin_mon + 1, 4),'VariableNames', {'y', 'mkt','smb','vmg'});
     model = fitlm(tb, 'y~mkt+smb+vmg');
-    disp("Portfolio  " + num2str(ptr) + " EW");
+    disp(['Portfolio  ', char(num2str(ptr)), ' EW']);
     model
     %plot(model);
     
     y = aggregate_results(ptr * 2, :)' - Rf(1:end_mon-begin_mon + 1, 2);
     tb = table(y, Three_Factor(1:end_mon-begin_mon + 1,2), Three_Factor(1:end_mon-begin_mon + 1, 3), Three_Factor(1:end_mon-begin_mon + 1, 4),'VariableNames', {'y', 'mkt','smb','vmg'});
     model = fitlm(tb, 'y~mkt+smb+vmg');
-    disp("Portfolio  " + num2str(ptr) + " VW");
+    disp(['Portfolio  ' ,char( num2str(ptr)), ' VW']);
     model
 end
+
+% Group 1 - Group 5
+y = aggregate_results(1 * 2 - 1, :)' - aggregate_results(5 * 2 - 1, :)';
+tb = table(y, Three_Factor(1:end_mon-begin_mon + 1,2), Three_Factor(1:end_mon-begin_mon + 1, 3), Three_Factor(1:end_mon-begin_mon + 1, 4),'VariableNames', {'y', 'mkt','smb','vmg'});
+model = fitlm(tb, 'y~mkt+smb+vmg');
+disp('1 - 5 EW');
+model
+%plot(model);
+
+y = aggregate_results(1 * 2, :)' - aggregate_results(5 * 2, :)';
+tb = table(y, Three_Factor(1:end_mon-begin_mon + 1,2), Three_Factor(1:end_mon-begin_mon + 1, 3), Three_Factor(1:end_mon-begin_mon + 1, 4),'VariableNames', {'y', 'mkt','smb','vmg'});
+model = fitlm(tb, 'y~mkt+smb+vmg');
+disp('1 - 5 VW');
+model
 
 end
